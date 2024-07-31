@@ -1,0 +1,61 @@
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+
+public class FileOutputExam {
+
+	public static void main(String[] args) {
+		// 파일 쓰기 ==> 폴더 생성
+		// 어디에 어떤 파일을 쓸 것인지 정의
+		// 파일을 쓰려는 경로가 존재하는가
+		// 존재하지 않는다면 경로를 생성, 즉 폴더를 생성
+
+		// 쓰려는 파일이 존재하는가? 존재한다면, 중복되지 않는 이름을 찾는다
+		File file = new File("C:\\Java\\outputs", "java_output.txt");
+
+		// 부모 디렉토리가 존재하지 않으면 생성
+		if (!file.getParentFile().exists()) {
+			file.getParentFile().mkdirs();
+		}
+
+		int index = 1;
+		String fileName = file.getName();
+
+		// 중복되지 않는 파일 이름 찾기
+		while (file.exists()) {
+			// 확장자 분리
+			String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf("."));
+			String extension = fileName.substring(fileName.lastIndexOf("."));
+
+			// 확장자가 분리된 파일에 이름의 순번 붙이기
+			fileNameWithoutExtension += " (" + index++ + ")";
+
+			// 확장자와 파일의 이름을 연결
+			String tempFileName = fileNameWithoutExtension + extension;
+
+			// 새로운 파일 객체 생성
+			file = new File(file.getParentFile(), tempFileName);
+		}
+
+		// 파일에 내용을 쓸 리스트 생성
+		List<String> fileDescription = new ArrayList<>();
+		fileDescription.add("파일의 내용을 씁니다.1");
+		fileDescription.add("파일의 내용을 씁니다.2");
+		fileDescription.add("파일의 내용을 씁니다.3");
+		fileDescription.add("파일의 내용을 씁니다.4");
+		fileDescription.add("파일의 내용을 씁니다.5");
+
+		// 파일에 내용 쓰기
+		try {
+			Files.write(file.toPath(), fileDescription, Charset.defaultCharset());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// 생성된 파일의 경로 출력
+		System.out.println(file.getAbsolutePath());
+	}
+}
