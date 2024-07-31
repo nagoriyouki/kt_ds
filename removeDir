@@ -1,0 +1,33 @@
+import java.io.File;
+
+public class RemoveMulti {
+
+	public void removeAllFiles(File removeDir) {
+
+		if (removeDir.exists() && removeDir.isDirectory()) {// 파일이 존재하고, 그 파일이 폴더일경우
+			// dir.listFiles();
+			File[] itemInDir = removeDir.listFiles();// 폴더이름을 받아와서 그걸 리스트 형태로 생성
+
+			for (File item : itemInDir) { // 그 내부에 있는 걸 다 돌떄까지
+				if (item.isDirectory()) {// 폴더라면
+					removeAllFiles(item);// explorer실행
+				} else {// 아니라면 절대경로 프린트
+					item.delete();
+				}
+			}
+			removeDir.delete();//안에 있는 걸 다 지우고 마지막으로 자기 자신을 지운다 생각
+
+		} else if (removeDir.exists() && removeDir.isFile()) {// 파일이 존재하고 그게 파일이면
+			removeDir.delete();
+		}
+
+	}
+
+	public static void main(String[] args) {
+		RemoveMulti rm=new RemoveMulti();
+		File removeDir=new File("C:\\Java\\new");
+		rm.removeAllFiles(removeDir);
+
+	}
+
+}
